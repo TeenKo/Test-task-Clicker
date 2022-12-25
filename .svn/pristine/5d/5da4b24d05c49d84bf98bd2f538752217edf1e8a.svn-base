@@ -1,0 +1,17 @@
+﻿using Entitas;
+
+namespace Core.Ui
+{
+    public class UiVictoryScreen : UIScreen, IAnyVictoryListener
+    {
+        public override void Init(IEntity iEntity)
+        {
+            base.Init(iEntity);
+            Contexts.sharedInstance.state.CreateEntity().AddAnyVictoryListener(this);
+        }
+        public void OnAnyVictory(StateEntity entity)
+        {
+            Open();
+        }      
+    }
+}

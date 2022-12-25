@@ -1,0 +1,19 @@
+using Entitas;
+
+namespace Core.PlayerData
+{
+    public sealed class PlayerDataSystems : Systems
+    {
+        public PlayerDataSystems(GameContext gameContext, StateContext stateContext)
+        {
+            Add(new PlayerDataInitializeSystem(gameContext));
+            Add(new PlayerDataLoadFailedSystem(gameContext));
+            Add(new PlayerDataLoadCompleteSystem(gameContext, stateContext));
+
+            Add(new StartPlayGameLevelReactSystem(gameContext));
+            Add(new PlayerWonTheGameReactSystem(stateContext, gameContext));
+            Add(new PlayerFailedTheGameLevelReactSystem(stateContext, gameContext));
+            Add(new PlayerRestartCurrentGameLevelReactSystem(stateContext, gameContext));
+        }
+    }
+}

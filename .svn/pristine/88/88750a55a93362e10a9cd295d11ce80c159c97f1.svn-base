@@ -1,0 +1,24 @@
+using Core.Configs;
+using Entitas;
+using Services.GameLevelsLoadRule;
+
+namespace Core.GameLevels
+{
+    public sealed class InitializeGameLevelsSystem : IInitializeSystem
+    {
+        private readonly Contexts _contexts;
+
+        public InitializeGameLevelsSystem(Contexts contexts)
+        {
+            _contexts = contexts;
+            _contexts.game.isStaticCurrentGameLevel = true;
+        }
+
+        public void Initialize()
+        {
+            var gameLevels = ConfigsCatalogsManager.GetConfig<GameLevelsConfig>().GameLevels;
+            var currentGameLevelEntity = _contexts.game.currentGameLevelEntity;
+            currentGameLevelEntity.AddGameLevelsLoadRule(new RandomLoopedChainGameLevelsLoadRule(gameLevels));
+        }
+    }
+}

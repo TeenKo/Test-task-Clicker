@@ -1,0 +1,19 @@
+namespace Core.InAppPurchases
+{
+    /// <summary>
+    /// Набор систем взаимодействия с сервисом внутриигровых покупок (Unity IAP)
+    /// </summary>
+    public sealed class InAppPurchaseGroupSystems : Entitas.Systems
+    {
+        public InAppPurchaseGroupSystems(Contexts context)
+        {
+            Add(new InitializeSystem(context.inAppPurchase));
+            Add(new InitializingCompleteSystem(context.inAppPurchase));
+            Add(new PurchaseRequestProcessingSystem(context.inAppPurchase));
+            Add(new RestoreTransactionProcessingSystem(context.inAppPurchase));
+            Add(new PurchaseHandlerSystem(context));
+            
+            Add(new InAppPurchaseEventSystems(context));
+        }
+    }
+}

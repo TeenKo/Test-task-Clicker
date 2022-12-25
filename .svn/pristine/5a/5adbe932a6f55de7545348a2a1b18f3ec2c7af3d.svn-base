@@ -1,0 +1,9 @@
+using Core.Analytics;
+using Core.AnalyticsService;
+
+namespace Adapters.FacebookAnalytics
+{
+    public interface IFacebookService : IAnalyticsService
+    {
+    }
+}

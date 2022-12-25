@@ -1,0 +1,34 @@
+﻿using System.Collections.Generic;
+using Entitas;
+
+namespace Core.PlayerData
+{
+    /// <summary>
+    /// Система инициализации игры после загрузки плеер даты
+    /// </summary>
+    public sealed class PlayerDataLoadCompleteSystem : ReactiveSystem<GameEntity>
+    {
+        private readonly Contexts _context;
+
+        public PlayerDataLoadCompleteSystem(Contexts context) : base(context.game)
+        {
+            _context = context;
+        }
+
+        protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
+        {
+            return context.CreateCollector(GameMatcher.LoadingDatasuccessful);
+        }
+
+        protected override bool Filter(GameEntity entity)
+        {
+            return entity.isStaticCurrentPlayerData;
+        }
+
+        protected override void Execute(List<GameEntity> entities)
+        {
+            //Init Game
+            _context.state.appStateEntity.transitionMainMenu = true;          
+        }
+    }
+}

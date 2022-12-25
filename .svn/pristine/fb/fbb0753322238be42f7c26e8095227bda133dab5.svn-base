@@ -1,0 +1,10 @@
+﻿using Entitas;
+
+public sealed class GameLoopSystems : Systems
+{
+    public GameLoopSystems(Contexts contexts)
+    {
+        // add you game logic here
+        Add(new GameLoadPlayerDataCompleteReactSystem(contexts.game, contexts.level));
+    }
+}

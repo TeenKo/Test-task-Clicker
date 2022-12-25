@@ -1,0 +1,13 @@
+﻿using Entitas;
+
+namespace Core.ApplicationStart
+{
+    public sealed class InitializeGameSystem : Systems
+    {
+        public InitializeGameSystem(GameContext gameContext, StateContext stateContext)
+        {
+            stateContext.isStaticAppState = true;
+            gameContext.isStaticCurrentGame = true;
+        }
+    }
+}

@@ -1,0 +1,12 @@
+﻿using Core.Configs;
+using UnityEngine;
+
+/// <summary>
+/// Хранит ссылки на префабы и другие игровые ресурсы
+/// </summary>
+[CreateAssetMenu(fileName = "ResourceConfig", menuName = "Configs/Game/ResourceConfig")]
+public sealed class ResourceConfig : Config
+{
+    public GameObject UiSimpleStoreItemPrefab;
+    public GameObject UiPremiumStoreItemPrefab;
+}

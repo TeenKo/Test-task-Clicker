@@ -1,0 +1,19 @@
+﻿using Entitas;
+
+namespace Core.Ui
+{
+    public class UiMainMenuScreen : UIScreen, IAnyMainMenuListener
+    {
+
+        public override void Init(IEntity iEntity)
+        {
+            base.Init(iEntity);
+            Contexts.sharedInstance.state.CreateEntity().AddAnyMainMenuListener(this);
+        }
+        public void OnAnyMainMenu(StateEntity entity)
+        {
+            Open();
+        }
+    }
+
+}

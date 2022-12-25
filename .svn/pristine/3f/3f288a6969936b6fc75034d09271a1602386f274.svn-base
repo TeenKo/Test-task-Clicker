@@ -1,0 +1,49 @@
+using System.Collections.Generic;
+using Adapters;
+using Adapters.InAppPurchase;
+using Core.Configs;
+using Entitas;
+
+namespace Core.InAppPurchases
+{
+    public sealed class PurchaseHandlerSystem : ReactiveSystem<InAppPurchaseEntity>
+    {
+        private readonly Contexts _contexts;
+        private readonly InAppPurchasesConfig _config;
+
+        public PurchaseHandlerSystem(Contexts context) : base(context.inAppPurchase)
+        {
+            _contexts = context;
+            _config = ConfigsCatalogsManager.GetConfig<UnityInAppPurchasesConfig>();
+        }
+
+        protected override ICollector<InAppPurchaseEntity> GetTrigger(IContext<InAppPurchaseEntity> context)
+        {
+           return context.CreateCollector(InAppPurchaseMatcher.ProductStatus);
+        }
+
+        protected override bool Filter(InAppPurchaseEntity entity)
+        {
+           return entity.productStatus.value;
+        }
+
+        protected override void Execute(List<InAppPurchaseEntity> entities)
+        {
+            // todo: add to component
+            var removeAdsProductId = _config.GetRemoveAdsProductId();
+            
+            foreach (var inAppPurchaseEntity in entities)
+            {
+                if (inAppPurchaseEntity.productId.value == removeAdsProductId)
+                {
+                    _contexts.inAppPurchase.serviceEntity.isRemoveAds = true;
+                    _contexts.advertisement.serviceEntity.requestDisableAdvertisement = true;
+
+                    Dbg.Log("Remove Ads Product = true");
+                }
+                
+                //todo: при необходимости добавить прочие обработчики для покупок
+            }
+        }
+    }
+}

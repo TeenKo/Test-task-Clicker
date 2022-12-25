@@ -1,0 +1,9 @@
+using Entitas;
+
+namespace Core.Common
+{    
+    [Game]
+    public sealed  class PoolObjectComponent : IComponent
+    {
+    }
+}

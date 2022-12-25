@@ -1,0 +1,49 @@
+﻿using System.Collections.Generic;
+using Entitas;
+
+namespace Core.PlayerData
+{
+    /// <summary>
+    /// Система инициализации новых данных игрока
+    /// </summary>
+    public sealed class PlayerDataLoadFailedSystem : ReactiveSystem<GameEntity>
+    {
+        private readonly Contexts _context;
+
+        public PlayerDataLoadFailedSystem(Contexts context) : base(context.game)
+        {
+            _context = context;
+        }
+
+        protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
+        {
+            return context.CreateCollector(GameMatcher.LoadingDataFailed);
+        }
+
+        protected override bool Filter(GameEntity entity)
+        {
+            return entity.isStaticCurrentPlayerData;
+        }
+
+        protected override void Execute(List<GameEntity> entities)
+        {
+            foreach (var playerDataEntity in entities)
+            {
+                // money and score
+                playerDataEntity.AddPlayerMoney(0);
+                playerDataEntity.AddPlayerCurrentScore(0);
+                playerDataEntity.AddPlayerTotalScore(0);
+                // game levels
+                playerDataEntity.AddPlayerCurrentGameLevel(0);
+                playerDataEntity.AddPlayerGameLevelCount(0);
+                playerDataEntity.AddPlayerGameLevelLoop(1);
+                playerDataEntity.AddPlayerGameLevelProgress(0);
+
+                playerDataEntity.systemTriggerSaveData = true;
+                playerDataEntity.systemTriggerLoadingDatasuccessful = true;
+
+                Dbg.Log("Созданны новые данные игрока");
+            }
+        }
+    }
+}

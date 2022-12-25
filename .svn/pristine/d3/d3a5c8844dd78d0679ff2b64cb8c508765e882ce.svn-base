@@ -1,0 +1,37 @@
+using System.Collections.Generic;
+using Entitas;
+using UnityEngine;
+
+namespace Core.PlayerData
+{
+    public sealed class StartPlayGameLevelReactSystem : ReactiveSystem<GameEntity>
+    {
+        private readonly GameContext _gameContext;
+
+        public StartPlayGameLevelReactSystem(GameContext context) : base(context)
+        {
+            _gameContext = context;
+        }
+
+        protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
+        {
+            return context.CreateCollector(GameMatcher.GameStarted.Added());
+        }
+
+        protected override bool Filter(GameEntity entity)
+        {
+            return true;
+        }
+
+        protected override void Execute(List<GameEntity> entities)
+        {
+            var currentPlayerDataEntity = _gameContext.currentPlayerDataEntity;
+            var value = currentPlayerDataEntity.playerGameLevelCount.value + 1;
+            value = value + 1 >= int.MaxValue ? 0 : value;
+            currentPlayerDataEntity.ReplacePlayerGameLevelCount(value);
+            currentPlayerDataEntity.ReplacePlayerGameLevelPlayTime((int) Time.unscaledTime);
+            currentPlayerDataEntity.ReplacePlayerGameLevelProgress(0);
+            currentPlayerDataEntity.systemTriggerSaveData = true;
+        }
+    }
+}

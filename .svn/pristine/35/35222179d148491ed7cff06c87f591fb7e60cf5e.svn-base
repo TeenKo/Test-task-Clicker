@@ -1,0 +1,79 @@
+using System.Collections.Generic;
+using System.Linq;
+using Adapters;
+using Entitas;
+
+namespace Core.Analytics
+{
+    public sealed class GameLevelStartReactSystem : ReactiveSystem<StateEntity>
+    {
+        private readonly AnalyticContext _analyticContext;
+        private readonly IGroup<GameEntity> _playerGameDataGroup;
+
+        public GameLevelStartReactSystem(AnalyticContext analyticContext, GameContext gameContext, StateContext stateContext) : base(stateContext)
+        {
+            _analyticContext = analyticContext;
+            _playerGameDataGroup = gameContext.GetGroup(GameMatcher.AnyOf(GameMatcher.CurrentPlayerData,
+                GameMatcher.PlayerCurrentGameLevel,
+                GameMatcher.PlayerGameLevelCount,
+                GameMatcher.PlayerGameLevelProgress,
+                GameMatcher.PlayerGameLevelPlayTime));
+        }
+
+        protected override ICollector<StateEntity> GetTrigger(IContext<StateEntity> context)
+        {
+            return context.CreateCollector(StateMatcher.Game.Added());
+        }
+
+        protected override bool Filter(StateEntity entity)
+        {
+            return true;
+        }
+
+        protected override void Execute(List<StateEntity> entities)
+        {
+            if (GetPlayerDataEntity(out var playerDataEntity) == false) return;
+
+            // get dummy data (replace parameters to REAL DATA)
+            var dummyParameters = new AnalyticsConfig.EventGameLevelParameters().Dummy();
+            var gameLevelNumber = playerDataEntity.hasPlayerCurrentGameLevel
+                ? playerDataEntity.playerCurrentGameLevel.value
+                : (int) dummyParameters.ElementAt(0).Value;
+            var gameLevelName = (string) dummyParameters.ElementAt(1).Value;
+            var gameLevelCount = playerDataEntity.hasPlayerGameLevelCount ? playerDataEntity.playerGameLevelCount.value : (int) dummyParameters.ElementAt(2).Value;
+            var gameLevelDiff = (string) dummyParameters.ElementAt(3).Value;
+            var gameLevelLoop = playerDataEntity.hasPlayerGameLevelLoop ? playerDataEntity.playerGameLevelLoop.value : (int) dummyParameters.ElementAt(4).Value;
+            var gameLevelRandom = (bool) dummyParameters.ElementAt(5).Value;
+            var gameLevelType = (string) dummyParameters.ElementAt(6).Value;
+            var gameMode = (string) dummyParameters.ElementAt(7).Value;
+
+            // create request to send event
+            var analyticEntity = _analyticContext.CreateEntity();
+            analyticEntity.isGameLevelStart = true;
+            analyticEntity.AddGameLevelNumber(gameLevelNumber);
+            analyticEntity.AddGameLevelName(gameLevelName);
+            analyticEntity.AddGameLevelCount(gameLevelCount);
+            analyticEntity.AddGameLevelDiff(gameLevelDiff);
+            analyticEntity.AddGameLevelLoop(gameLevelLoop);
+            analyticEntity.AddGameLevelRandom(gameLevelRandom);
+            analyticEntity.AddGameLevelType(gameLevelType);
+            analyticEntity.AddGameLevelMode(gameMode);
+            analyticEntity.AddGameLevelResult("start");
+            analyticEntity.AddGameLevelTime(0);
+            analyticEntity.AddGameLevelProgress(0);
+            analyticEntity.AddGameLevelContinueForAd(0);
+
+            bool GetPlayerDataEntity(out GameEntity playerEntity)
+            {
+                playerEntity = null;
+                foreach (var gameEntity in _playerGameDataGroup.GetEntities())
+                {
+                    playerEntity = gameEntity;
+                    return true;
+                }
+                
+                return false;
+            }
+        }
+    }
+}

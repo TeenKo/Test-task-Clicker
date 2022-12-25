@@ -1,0 +1,13 @@
+﻿using Entitas;
+
+namespace Core.ApplicationStart
+{
+    public sealed class ApplicationStartSystems : Systems
+    {
+        public ApplicationStartSystems(GameContext gameContext, StateContext stateContext, UiContext uiContext)
+        {        
+            Add(new InitializeGameSystem(gameContext, stateContext));
+            Add(new InitializeUiElementSystem(uiContext));
+        }
+    }
+}

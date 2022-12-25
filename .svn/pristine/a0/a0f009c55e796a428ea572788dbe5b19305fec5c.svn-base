@@ -1,0 +1,19 @@
+﻿using Core.Configs;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "AdvertisementRewardConfig", menuName = "Configs/Game/AdvertisementRewardConfig")]
+public sealed class AdvertisementRewardConfig : Config
+{
+    [Header("Награда за прохождение уровня")]
+    public int LevelCompleteMoneyReward;
+    public int LeveleCompleteRewardMultiply;
+
+    [Header("Денежная награда в магазине")]
+    public int StoreMoneyReward;
+
+    //[Header("Награда получение предмета в магазине")]
+    //пусто
+
+    // [Header("Награда возрождение в игре")]
+    //пусто
+}

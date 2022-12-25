@@ -1,0 +1,7 @@
+namespace Services.GameLevelsLoadRule
+{
+    public interface IGameLevelsLoadRule
+    {
+        Core.GameLevels.LevelSchema GetNextLevel(int currentIndex);
+    }
+}

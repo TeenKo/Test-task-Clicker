@@ -1,0 +1,37 @@
+using System.Collections.Generic;
+using Entitas;
+
+namespace Core.PlayerData
+{
+    public sealed class PlayerFailedTheGameLevelReactSystem : ReactiveSystem<StateEntity>
+    {
+        private readonly GameContext _gameContext;
+
+        public PlayerFailedTheGameLevelReactSystem(IContext<StateEntity> context, GameContext gameContext) :
+            base(context)
+        {
+            _gameContext = gameContext;
+        }
+
+        protected override ICollector<StateEntity> GetTrigger(IContext<StateEntity> context)
+        {
+            return context.CreateCollector(StateMatcher.Defeat.Added());
+        }
+
+        protected override bool Filter(StateEntity entity)
+        {
+            return true;
+        }
+
+        protected override void Execute(List<StateEntity> entities)
+        {
+            var currentPlayerDataEntity = _gameContext.currentPlayerDataEntity;
+            // var nextPlayerGameLevel = currentPlayerDataEntity.playerCurrentGameLevel.value;
+            // currentPlayerDataEntity.ReplacePlayerCurrentGameLevel(nextPlayerGameLevel);
+            
+            // todo: нормально перевести в секунды!!!
+            var playTime = (int)(UnityEngine.Time.unscaledTime - currentPlayerDataEntity.playerGameLevelPlayTime.value);
+            currentPlayerDataEntity.ReplacePlayerGameLevelPlayTime(playTime);
+        }
+    }
+}

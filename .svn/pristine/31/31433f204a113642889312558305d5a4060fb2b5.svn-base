@@ -1,0 +1,31 @@
+using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+namespace Core.Ui
+{
+    public class UiRootSchema : MonoBehaviour
+    {
+        [Header("Screens")] public UIScreen[] uIScreens;
+
+        //[Header("Elements")]
+    }
+
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(UiRootSchema))]
+    public class UiRootSchemaEditor : Editor
+    {
+        private void OnEnable()
+        {
+        }
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+        }
+    }
+#endif
+}

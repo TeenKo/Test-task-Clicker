@@ -1,0 +1,19 @@
+﻿using Entitas;
+using Entitas.CodeGeneration.Attributes;
+
+namespace Core.Common
+{
+    //GAME LOOP COMPONENTS
+
+    //синглтон компонет
+    [Game, Unique, FlagPrefix("isStatic")]
+    public sealed class CurrentGameComponent : IComponent
+    {
+    }
+    
+    //Игра запущена
+    [Game]
+    public sealed class GameStartedComponent : IComponent
+    {
+    }
+}

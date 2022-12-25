@@ -1,0 +1,25 @@
+using Entitas;
+using UnityEngine;
+
+namespace Core.AnalyticsService.Facebook
+{
+   
+    /// <summary>
+    /// Система инициализации сервиса
+    /// </summary>
+    public sealed class InitializeFacebookSystem : IInitializeSystem
+    {
+        private readonly AnalyticContext _contexts;
+
+        public InitializeFacebookSystem(IContext<AnalyticEntity> context)
+        {
+            _contexts = context as AnalyticContext;
+            _contexts?.SetFacebookService(new Adapters.FacebookAnalytics.Facebook());
+        }
+
+        public void Initialize()
+        {
+            _contexts.facebookService.value.Initialize(() => { }, s => Debug.Log($"InitializeFacebookSystem failed. Reason: {s}"));
+        }
+    }
+}

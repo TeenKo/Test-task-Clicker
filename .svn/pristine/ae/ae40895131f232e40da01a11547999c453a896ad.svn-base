@@ -1,0 +1,74 @@
+using Core.Extension;
+using Entitas;
+using UnityEngine;
+
+namespace Core.Input
+{
+    public enum AxisOptions
+    {
+        Both,
+        Horizontal,
+        Vertical
+    }
+
+    public sealed class Joystick : MonoBehAdvGame,
+        IJoystickHandleAnchoredPositionListener, IJoystickBackgroundAnchoredPositionListener,
+        IJoystickHandleSetActiveListener, IJoystickBackgroundSetActiveListener
+    {
+        [SerializeField] private Camera joystickCamera;
+        [SerializeField] private float handleRange = 1;
+        [SerializeField] private float deadZone = 0;
+        [SerializeField] private AxisOptions axisOptions = AxisOptions.Both;
+        [SerializeField] private bool snapX = false;
+        [SerializeField] private bool snapY = false;
+        [Space(10)] [SerializeField] private RectTransform background = null;
+        [SerializeField] private RectTransform handle = null;
+
+        public Camera JoystickCamera => joystickCamera;
+
+        public float HandleRange => handleRange;
+
+        public float DeadZone => deadZone;
+
+        public AxisOptions AxisOptions => axisOptions;
+
+        public bool SnapX => snapX;
+
+        public bool SnapY => snapY;
+
+        public RectTransform Background => background;
+
+        public RectTransform Handle => handle;
+
+        public override void Init(IEntity iEntity)
+        {
+            base.Init(iEntity);
+
+            var center = new Vector2(0.5f, 0.5f);
+            background.pivot = center;
+            handle.anchorMin = center;
+            handle.anchorMax = center;
+            handle.pivot = center;
+        }
+
+        public void OnJoystickHandleAnchoredPosition(GameEntity entity, Vector2 value)
+        {
+            Handle.anchoredPosition = value;
+        }
+
+        public void OnJoystickBackgroundAnchoredPosition(GameEntity entity, Vector2 value)
+        {
+            Background.anchoredPosition = value;
+        }
+
+        public void OnJoystickHandleSetActive(GameEntity entity, bool value)
+        {
+            Handle.gameObject.SetActive(value);
+        }
+
+        public void OnJoystickBackgroundSetActive(GameEntity entity, bool value)
+        {
+            Background.gameObject.SetActive(value);
+        }
+    }
+}

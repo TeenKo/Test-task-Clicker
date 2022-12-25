@@ -1,0 +1,36 @@
+using System.Collections.Generic;
+using Entitas;
+using UnityEngine;
+
+namespace Core.Input
+{
+    public sealed class JoystickTouchEndedReactSystem : ReactiveSystem<InputEntity>
+    {
+        private readonly GameContext _gameContext;
+
+        public JoystickTouchEndedReactSystem(InputContext inputContext, GameContext gameContext) : base(inputContext)
+        {
+            _gameContext = gameContext;
+        }
+
+        protected override ICollector<InputEntity> GetTrigger(IContext<InputEntity> context)
+        {
+            return context.CreateCollector(InputMatcher.TouchPhase);
+        }
+
+        protected override bool Filter(InputEntity entity)
+        {
+            return entity.touchPhase.value == TouchPhase.Ended;
+        }
+
+        protected override void Execute(List<InputEntity> entities)
+        {
+            var gamePadEntity = _gameContext.joystickEntity;
+            
+            gamePadEntity.ReplaceJoystickBackgroundSetActive(false);
+            gamePadEntity.ReplaceJoystickHandleSetActive(false);
+            gamePadEntity.ReplaceJoystickInput(Vector2.zero);
+            gamePadEntity.ReplaceJoystickHandleAnchoredPosition(Vector2.zero);
+        }
+    }
+}

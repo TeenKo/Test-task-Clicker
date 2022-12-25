@@ -1,0 +1,64 @@
+﻿using Core.Advertisement;
+using Core.Analytics;
+using Core.ApplicationStart;
+using Core.ApplicationStates;
+using Core.AudioService;
+using Core.Configs;
+using Core.DataStorage;
+using Core.DeveloperMode;
+using Core.GameLevels;
+using Core.InAppPurchases;
+using Core.Input;
+using Entitas;
+
+namespace Core
+{
+    public sealed class GameCoreSystems : Systems
+    {
+        public GameCoreSystems(Contexts contexts)
+        {
+            // var gameConfig = ConfigsCatalogsManager.GetConfig<GameConfig>();
+            var debugLogConfig = ConfigsCatalogsManager.GetConfig<DebugLogConfig>();
+
+            #region Services
+
+            Add(new InAppPurchaseGroupSystems(contexts));
+            Add(new AdvertisementsGroupSystems(contexts));
+            Add(new AnalyticGroupSystems(contexts));
+
+            #endregion
+
+            Add(new EditorInputSystem(contexts));
+            
+            #region Core systems
+
+            Add(new DataStorageGroupSystems(contexts.game, debugLogConfig));
+            Add(new InputGroupSystems(contexts));
+            Add(new AudioGroupSystems(contexts));
+            
+            Add(new GameCoreStartGroupSystems(contexts));
+            
+            Add(new GameStateTransitionGroupSystems(contexts));
+            
+            Add(new GameLevelsGroupSystems(contexts));
+
+            #endregion
+            
+            Add(new GameLoopSystems(contexts));
+
+            #region DO NOT EDIT! Event and cleanup systems
+
+            Add(new GameEventSystems(contexts));
+            Add(new GameCleanupSystems(contexts));
+            
+            Add(new InputCleanupSystems(contexts));
+            Add(new InputEventSystems(contexts));
+
+            Add(new StateEventSystems(contexts));
+            Add(new StateCleanupSystems(contexts));
+            
+            #endregion
+           
+        }
+    }
+}

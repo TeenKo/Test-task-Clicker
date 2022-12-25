@@ -1,0 +1,35 @@
+﻿namespace Core.Advertisement
+{
+    /// <summary>
+    /// Набор систем взаимодействия с сервисом рекламных объявлений GoogleAdMob
+    /// </summary>
+    public sealed class AdvertisementsGroupSystems : Entitas.Systems
+    {
+        /// <summary>
+        /// Набор систем для работы рекламного модуля
+        /// </summary>        
+        public AdvertisementsGroupSystems(Contexts context)
+        {
+            // initialize
+            Add(new InitializeSystem(context.advertisement));
+            Add(new InitializingCompleteSystem(context.advertisement));
+
+            // disable banner & interstitial on purchase "no ads" product
+            Add(new DisableAdvertisementSystem(context.advertisement));
+            
+            // show ads
+            Add(new BannerShowSystem(context.advertisement));
+            Add(new InterstitialShowSystem(context.advertisement));
+            Add(new RewardedShowSystem(context));
+
+            // create and load ads
+            Add(new BannerLoadingSystem(context.advertisement));
+            Add(new InterstitialLoadingSystem(context.advertisement));
+            Add(new RewardedLoadingSystem(context.advertisement));
+            
+            // event and cleanup
+            Add(new AdvertisementEventSystems(context));
+            Add(new AdvertisementCleanupSystems(context));
+        }
+    }
+}

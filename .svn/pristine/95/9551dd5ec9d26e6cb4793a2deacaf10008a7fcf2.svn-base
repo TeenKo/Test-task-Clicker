@@ -1,0 +1,15 @@
+﻿using Core.Extension;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace UI
+{
+    public class UILevelProgressView : MonoBehAdvUi, IPlayerGameLevelProgressListener
+    {
+        [SerializeField] private Slider slider;
+        public void OnPlayerGameLevelProgress(GameEntity entity, float value)
+        {
+            slider.value = value;
+        }
+    }
+}

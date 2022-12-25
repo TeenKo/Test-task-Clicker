@@ -1,0 +1,44 @@
+﻿using Core.Configs;
+using UnityEngine;
+
+/// <summary>
+/// Хранит каталог товаров в сторе
+/// </summary>
+[CreateAssetMenu(fileName = "StoreCatalogConfig", menuName = "Configs/Game/StoreCatalogConfig")]
+public sealed class StoreCatalogConfig : Config
+{
+    public StoreCatalog SimpleStoreCatalog;
+    public PremiumCatalog PremiumStoreCatalog;
+}
+
+[System.Serializable]
+public class StoreCatalog
+{       
+    public int catalogPrice;
+    public SimpleStoreItem[] items;
+}
+
+[System.Serializable]
+public class PremiumCatalog
+{       
+    public PremiumStoreItem[] items;
+}
+
+[System.Serializable]
+public class SimpleStoreItem
+{
+    public string Idkey;
+    public bool isSold;   
+    public Sprite IconImage;
+    public GameObject prefab;       
+}
+
+[System.Serializable]
+public class PremiumStoreItem
+{
+    public string Idkey;
+    public bool isSold;
+    public int price;
+    public Sprite IconImage;
+    public GameObject prefab;
+}

@@ -1,0 +1,9 @@
+using Core.Analytics;
+using Core.AnalyticsService;
+
+namespace Adapters.FirebaseAnalytics
+{
+    public interface IFirebaseService : IAnalyticsService
+    {
+    }
+}

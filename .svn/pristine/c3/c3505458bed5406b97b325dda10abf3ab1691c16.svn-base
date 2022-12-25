@@ -1,0 +1,13 @@
+using Core.Extension;
+
+namespace Core.GameLevels
+{
+    public class LevelSchema : MonoBehAdvGameLevelCleanup
+    {
+        public string GameObjectName
+        {
+            get => gameObject.name;
+            set => gameObject.name = value;
+        }
+    }
+}

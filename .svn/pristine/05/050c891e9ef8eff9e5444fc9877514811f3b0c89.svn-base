@@ -1,0 +1,14 @@
+using Entitas;
+
+namespace Core.GameLevels
+{
+    public sealed class GameLevelsGroupSystems : Systems
+    {
+        public GameLevelsGroupSystems(Contexts contexts)
+        {
+            Add(new InitializeGameLevelsSystem(contexts));
+            Add(new CompleteLoadGameLevelSystem(contexts));
+            Add(new StartLoadGameLevelSystem(contexts));
+        }
+    }
+}

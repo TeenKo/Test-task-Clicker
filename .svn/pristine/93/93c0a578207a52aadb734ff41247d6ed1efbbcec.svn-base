@@ -1,0 +1,13 @@
+﻿namespace Core.Audio.Sound
+{
+    public sealed class SoundsGroupSystems : Feature
+    {
+        public SoundsGroupSystems(Contexts contexts)
+        {
+            Add(new RequestPlaySoundListenerSystem(contexts.audio));
+            Add(new RequestStopPlaySoundListenerSystem(contexts.audio));
+
+            Add(new PlayButtonSoundReactSystem(contexts.input));
+        }
+    }
+}

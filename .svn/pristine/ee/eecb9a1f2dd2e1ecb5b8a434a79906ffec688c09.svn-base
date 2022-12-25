@@ -1,0 +1,26 @@
+using Adapters.InAppPurchase;
+using Entitas;
+
+namespace Core.InAppPurchases
+{
+    /// <summary>
+    /// Система инициализации сервиса
+    /// </summary>
+    public sealed class InitializeSystem : IInitializeSystem
+    {
+        private readonly InAppPurchaseContext _contexts;
+
+        internal InitializeSystem(InAppPurchaseContext context)
+        {
+            _contexts = context;
+            _contexts.SetService(new UnityInAppPurchasesService());
+        }
+
+        public void Initialize()
+        {
+            _contexts.serviceEntity.service.value.Initialize(
+                () => { _contexts.serviceEntity.isInAppPurchaseServiceInitialized = true; },
+                () => { });
+        }
+    }
+}

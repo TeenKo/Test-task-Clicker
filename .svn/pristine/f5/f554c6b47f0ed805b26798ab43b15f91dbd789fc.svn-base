@@ -1,0 +1,28 @@
+using Core.Audio;
+using Core.Audio.Ambient;
+using Core.Audio.Music;
+using Core.Audio.Sound;
+
+namespace Core.AudioService
+{
+    public sealed class AudioGroupSystems : Entitas.Systems
+    {
+        public AudioGroupSystems(Contexts contexts)
+        {
+            Add(new InitializeSystem(contexts.audio));
+            
+            Add(new FadeVolumeSystem(contexts.audio));
+            Add(new RequestFadeVolumeSystem(contexts.audio));
+
+            Add(new DelayCounterRequestPlaySoundSystem(contexts.audio));
+            
+            Add(new MusicGroupSystems(contexts));
+
+            Add(new SoundsGroupSystems(contexts));
+
+            Add(new AmbientGroupSystems(contexts));
+            
+            Add(new AudioCleanupSystems(contexts));
+        }
+    }
+}

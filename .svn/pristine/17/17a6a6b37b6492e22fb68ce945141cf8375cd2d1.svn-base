@@ -1,0 +1,115 @@
+using System.Collections.Generic;
+using Core.Extension;
+using Entitas;
+using UnityEngine;
+
+namespace Core.Pool
+{
+    public class GamePoolService
+    {
+       
+        private GamePoolService(string name)
+        {
+            //_name = name;
+            //GameObject poolGo = new GameObject { name = $"{_name}Parent" };
+            //_poolTransform = poolGo.transform;
+        }
+
+        private readonly string _name;
+     
+
+        //private readonly Dictionary<String, Stack<MonoBehAdv>> _pool =
+        //    new Dictionary<string, Stack<MonoBehAdv>>();
+
+        public override string ToString() => $"GamePool: {_name}";
+
+        //public MonoBehAdv SpawnObject(MonoBehAdv prefab,string name = "")
+        //{
+           
+               
+
+        //    if (!_pool.ContainsKey(prefab.name))
+        //        AddNewStackToPool(prefab);
+
+        //    _pool.TryGetValue(prefab.name, out Stack<MonoBehAdv> poolStack);
+
+        //    if (poolStack == null) return null;
+
+        //    if (poolStack.Count == 0)
+        //    {
+        //        MonoBehAdv newObject = UnityObjects.Instantiate(prefab, _poolTransform);          
+        //        newObject.name = prefab.name;
+        //        poolStack.Push(newObject);
+        //    }          
+
+        //    if (name != "") poolStack.Peek().gameObject.name = name;
+        //    poolStack.Peek().gameObject.SetActive(true);
+        //    return poolStack.Pop();
+        //}
+
+        public MonoBehAdv Spawn (MonoBehAdv prefab, IEntity entity, string poolName = "")
+        {
+            if(string.IsNullOrEmpty(poolName))
+            {
+                if(prefab is MonoBehAdvGame)
+                {
+                    GameEntity gameEntity = (GameEntity)entity;
+                    ((MonoBehAdvGame)prefab).Init(gameEntity);
+                }
+                else if( prefab is MonoBehAdvUi)
+                {
+                    UiEntity uiEntity = (UiEntity)entity;
+                    ((MonoBehAdvUi)prefab).Init(uiEntity);
+                }
+            }
+            else
+            {
+                Dbg.LogMagenta("Pool not realized");
+            }
+            return null;
+        }
+
+       
+
+       
+
+        private class PoolObject
+        {
+            private readonly Dictionary<string, Stack<MonoBehAdv>> _pool;
+            private readonly Transform _poolTransform;
+          
+            PoolObject(string name)
+            {
+                GameObject poolGo = new GameObject { name = $"{name}Parent" };
+                _pool = new Dictionary<string, Stack<MonoBehAdv>>();
+            }
+
+            public void SpawnObject (MonoBehAdv prefab)
+            {
+                //p
+            }
+
+            public void ReturnToPool(MonoBehAdv poolObject)
+            {
+                //if (!_pool.ContainsKey(poolObject.gameObject.GetHashCode()))
+                //    AddNewStackToPool(poolObject);
+
+                //_pool.TryGetValue(poolObject.gameObject.GetHashCode(), out Stack<MonoBehAdv> poolStack);
+
+                //if (poolStack == null) return;
+                //if (poolStack.Contains(poolObject)) return;
+
+                //poolStack.Push(poolObject);
+                //poolObject.gameObject.SetActive(false);
+                //poolObject.transform.parent = _poolTransform;
+            }
+
+            private void AddNewStackToPool(MonoBehAdv poolObject)
+            {
+                _pool.Add(poolObject.name, new Stack<MonoBehAdv>());
+            }
+        }
+
+       
+    }
+}

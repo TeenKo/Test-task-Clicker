@@ -1,0 +1,19 @@
+﻿using Core.PlayerData;
+using Entitas;
+
+namespace Core.ApplicationStart
+{
+    public sealed class GameCoreStartGroupSystems : Systems
+    {
+        /// <summary>
+        /// Набор систем для отработки  старта приложения
+        /// </summary>
+        public GameCoreStartGroupSystems(Contexts contexts)
+        {        
+            Add(new InitializeGameSystem(contexts));
+            Add(new InitializeUiElementSystem(contexts));
+
+            Add(new PlayerDataGroupSystems(contexts));
+        }
+    }
+}

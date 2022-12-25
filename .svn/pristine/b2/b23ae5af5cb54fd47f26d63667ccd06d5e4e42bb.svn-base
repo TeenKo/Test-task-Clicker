@@ -1,0 +1,31 @@
+﻿using System.Collections.Generic;
+using Entitas;
+
+namespace Core.PlayerData
+{
+    public sealed class PlayerDataLoadFailedSystem : ReactiveSystem<GameEntity>
+    {
+        public PlayerDataLoadFailedSystem(GameContext gameContext) : base(gameContext)
+        {
+        }
+
+        protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
+        {
+            return context.CreateCollector(GameMatcher.LoadingDataFailed);
+        }
+
+        protected override bool Filter(GameEntity entity)
+        {
+            return entity.isStaticCurrentPlayerData;
+        }
+
+        protected override void Execute(List<GameEntity> entities)
+        {
+            foreach (var playerDataEntity in entities)
+            {
+                playerDataEntity.systemTriggerSaveData = true;
+                playerDataEntity.systemTriggerLoadingDatasuccessful = true;
+            }
+        }
+    }
+}

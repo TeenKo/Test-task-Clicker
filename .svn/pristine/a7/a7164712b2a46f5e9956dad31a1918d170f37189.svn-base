@@ -1,0 +1,30 @@
+﻿using System.Collections.Generic;
+using Entitas;
+
+namespace Core.PlayerData
+{
+    public sealed class PlayerDataLoadCompleteSystem : ReactiveSystem<GameEntity>
+    {
+        private readonly StateContext _stateContext;
+
+        public PlayerDataLoadCompleteSystem(GameContext gameContext, StateContext stateContext) : base(gameContext)
+        {
+            _stateContext = stateContext;
+        }
+
+        protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
+        {
+            return context.CreateCollector(GameMatcher.LoadingDatasuccessful);
+        }
+
+        protected override bool Filter(GameEntity entity)
+        {
+            return entity.isStaticCurrentPlayerData;
+        }
+
+        protected override void Execute(List<GameEntity> entities)
+        {
+            _stateContext.appStateEntity.transitionMainMenu = true;          
+        }
+    }
+}

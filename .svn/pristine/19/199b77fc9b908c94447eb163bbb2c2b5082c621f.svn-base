@@ -1,0 +1,17 @@
+using Entitas;
+
+namespace Core.PlayerData
+{
+    public sealed class PlayerDataGroupSystems : Systems
+    {
+        public PlayerDataGroupSystems(Contexts contexts)
+        {
+            Add(new PlayerDataInitializeSystem(contexts));
+            Add(new PlayerDataLoadFailedSystem(contexts));
+            Add(new PlayerDataLoadCompleteSystem(contexts));
+
+            Add(new StartPlayGameLevelReactSystem(contexts.game));
+            Add(new PlayerWonTheGameReactSystem(contexts.state, contexts.game));
+        }
+    }
+}

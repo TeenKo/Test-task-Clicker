@@ -1,0 +1,23 @@
+using Entitas;
+using UnityEngine;
+
+namespace Core.Analytics.Voodoo
+{
+    public sealed class InitializeVoodooSystem : IInitializeSystem
+    {
+        private readonly AnalyticContext _contexts;
+
+        public InitializeVoodooSystem(AnalyticContext context)
+        {
+            _contexts = context;
+            _contexts.SetVoodooService(new Adapters.VoodooAnalytics.Voodoo());
+        }
+
+        public void Initialize()
+        {
+            _contexts.voodooService.value.Initialize(
+                () => { Debug.Log("InitializeVoodooSystem successful"); },
+                s => { Debug.Log($"InitializeVoodooSystem failed. Reason {s}"); });
+        }
+    }
+}

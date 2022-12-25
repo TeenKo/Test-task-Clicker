@@ -1,0 +1,26 @@
+#if FacebookSDK && !UNITY_EDITOR
+using Facebook.Unity;
+
+namespace Adapters.FacebookAnalytics
+{
+    public sealed class Facebook : IFacebookService
+    {
+        public void Initialize()
+        {
+            if (!FB.IsInitialized)
+                FB.Init(InitCallback, OnHide);
+            else
+                FB.ActivateApp();
+        }
+
+        private void InitCallback()
+        {
+            if (FB.IsInitialized) FB.ActivateApp();
+        }
+
+        private static void OnHide(bool isGameShown)
+        {
+        }
+    }
+}
+#endif

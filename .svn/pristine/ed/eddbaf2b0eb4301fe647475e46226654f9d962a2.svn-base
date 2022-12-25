@@ -1,0 +1,32 @@
+using Entitas;
+
+namespace Core.PlayerData
+{
+    public sealed class PlayerDataInitializeSystem : IInitializeSystem
+    {
+        private readonly GameContext _gameContext;
+        
+        public PlayerDataInitializeSystem(GameContext gameContext)
+        {
+            _gameContext = gameContext;
+            _gameContext.isStaticCurrentPlayerData = true;
+        }
+        
+        public void Initialize()
+        {
+            var playerDataEntity = _gameContext.currentPlayerDataEntity;
+            playerDataEntity.AddDataKey(GameConfig.PlayerDataKey);
+            // money and score
+            playerDataEntity.AddPlayerMoney(0); // savable
+            playerDataEntity.AddPlayerCurrentScore(0);
+            playerDataEntity.AddPlayerTotalScore(0); // savable
+            // game levels
+            playerDataEntity.AddPlayerCurrentGameLevel(0); // savable
+            playerDataEntity.AddPlayerGameLevelCount(0); // savable
+            playerDataEntity.AddPlayerGameLevelLoop(1);
+            playerDataEntity.AddPlayerGameLevelProgress(0);
+            playerDataEntity.AddPlayerGameLevelPlayTime(0);
+            playerDataEntity.systemTriggerLoadData = true;
+        }
+    }
+}

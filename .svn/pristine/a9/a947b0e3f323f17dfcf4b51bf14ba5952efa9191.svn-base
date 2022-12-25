@@ -1,0 +1,18 @@
+﻿using Entitas;
+
+namespace Core.Ui
+{
+    public class UiDefeatScreen : UIScreen, IAnyDefeatListener
+    {
+        public override void Init(IEntity iEntity)
+        {
+            base.Init(iEntity);
+            Contexts.sharedInstance.state.CreateEntity().AddAnyDefeatListener(this);
+        }
+
+        public void OnAnyDefeat(StateEntity entity)
+        {
+            Open();
+        }        
+    }
+}

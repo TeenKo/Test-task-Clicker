@@ -1,0 +1,29 @@
+using System;
+
+#if !FacebookSDK
+namespace Adapters.FacebookAnalytics
+{
+    public sealed class Facebook : IFacebookService
+    {
+        public void Initialize(Action complete, Action<string> failed)
+        {
+        }
+
+        public void ApplicationOnFocus(bool focus)
+        {
+        }
+
+        public void ApplicationOnPause(bool pause)
+        {
+        }
+
+        public void GameLevelStart(AnalyticsConfig.EventGameLevelParameters eventGameLevelParameters)
+        {
+        }
+
+        public void GameLevelFinish(AnalyticsConfig.EventGameLevelParameters eventGameLevelParameters)
+        {
+        }
+    }
+}
+#endif

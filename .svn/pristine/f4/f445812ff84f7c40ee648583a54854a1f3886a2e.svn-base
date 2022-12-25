@@ -1,0 +1,12 @@
+﻿using Core.Extension;
+using UnityEngine;
+
+namespace Core.Ui
+{
+    public class UiPremiumStoreCatalogView : MonoBehAdvUi
+    {
+        public Transform content;
+
+      
+    }
+}

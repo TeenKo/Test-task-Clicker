@@ -1,0 +1,11 @@
+namespace Core.Audio.Ambient
+{
+    public sealed class AmbientGroupSystems : Feature
+    {
+        public AmbientGroupSystems(Contexts contexts)
+        {
+            Add(new RequestPlayAmbientListenerSystem(contexts.audio));
+            Add(new RequestStopPlayAmbientListenerSystem(contexts.audio));
+        }
+    }
+}

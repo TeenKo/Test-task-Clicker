@@ -1,0 +1,37 @@
+namespace Core.Analytics
+{
+    public sealed class AnalyticGroupSystems : Entitas.Systems
+    {
+        public AnalyticGroupSystems(Contexts context)
+        {
+            // common analytics systems
+            Add(new InitializeAnalyticsSystem(context.analytic));
+            Add(new GameLevelStartReactSystem(context));
+            Add(new GameLevelFinishWithWinReactSystem(context));
+            Add(new GameLevelFinishWithLooseReactSystem(context));
+            
+#if AppMetrica
+            Add(new AppMetrica.InitializeAppMetricaSystem(context.analytic));
+            Add(new AppMetrica.AppMetricaGameLevelStartEventListenerSystem(context));
+            Add(new AppMetrica.AppMetricaGameLevelFinishEventListenerSystem(context));
+#endif
+            
+#if FacebookSDK
+            Add(new Facebook.InitializeFacebookSystem(context.analytic));
+#endif
+
+#if FirebaseSDK
+            Add(new Firebase.InitializeFirebaseSystem(context.analytic));
+            Add(new Firebase.InitializingFirebaseCompleteSystem(context.analytic));
+#endif
+
+#if VoodooSDK
+            Add(new Voodoo.InitializeVoodooSystem(context.analytic));
+            Add(new Voodoo.VoodooGameLevelStartEventListenerSystem(context));
+            Add(new Voodoo.VoodooGameLevelFinishEventListenerSystem(context));
+#endif
+            Add(new AnalyticEventSystems(context));
+            Add(new AnalyticCleanupSystems(context));
+        }
+    }
+}

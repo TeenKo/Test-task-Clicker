@@ -1,0 +1,16 @@
+﻿using Core.Extension;
+using TMPro;
+using UnityEngine;
+
+namespace Core.Ui
+{
+    public class UiPlayerMoneyView : MonoBehAdvUi, IPlayerMoneyListener
+    {
+        [SerializeField] private TextMeshProUGUI moneyTextField;
+
+        public void OnPlayerMoney(GameEntity entity, int value)
+        {
+            moneyTextField.text = value.ToString();
+        }
+    }
+}

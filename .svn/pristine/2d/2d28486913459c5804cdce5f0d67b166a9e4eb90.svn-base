@@ -1,0 +1,33 @@
+using System.Collections.Generic;
+using Core.Configs;
+using Entitas;
+
+namespace Core.Audio.Music
+{
+    public sealed class PlayMusicWinListenerSystem : ReactiveSystem<StateEntity>
+    {
+        private readonly IContext<AudioEntity> _context;
+        private readonly AudioConfig _config;
+        
+        public PlayMusicWinListenerSystem(Contexts contexts) : base(contexts.state)
+        {
+            _context = contexts.audio;
+            _config = ConfigsCatalogsManager.GetConfig<AudioConfig>();
+        }
+
+        protected override ICollector<StateEntity> GetTrigger(IContext<StateEntity> context)
+        {
+            return context.CreateCollector(StateMatcher.Victory.Added());
+        }
+
+        protected override bool Filter(StateEntity entity)
+        {
+            return true;
+        }
+
+        protected override void Execute(List<StateEntity> entities)
+        {
+            _context.CreateEntity().AddRequestPlaySideTrackMusic(_config.WinMusic);
+        }
+    }
+}

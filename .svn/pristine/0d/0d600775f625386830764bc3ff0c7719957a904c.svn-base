@@ -1,0 +1,14 @@
+namespace Core.Input
+{
+    public sealed class UIButtonsInputSystems : Entitas.Systems
+    {
+        public UIButtonsInputSystems(Contexts contexts)
+        {
+            Add(new OpenStoreButtonListenerSystem(contexts));
+            Add(new OpenMainMenuButtonListenerSystem(contexts));
+            Add(new StartGameButtonListenerSystem(contexts));
+            Add(new RestartGameButtonListenerSystem(contexts));
+            Add(new CompleteGameButtonListenerSystem(contexts));
+        }
+    }
+}

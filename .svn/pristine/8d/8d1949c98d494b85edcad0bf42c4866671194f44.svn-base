@@ -1,0 +1,34 @@
+﻿using System.Collections.Generic;
+using Entitas;
+
+namespace Core.Input
+{
+    public class StartGameButtonListenerSystem : ReactiveSystem<InputEntity>
+    {
+        private readonly Contexts _context;
+
+        public StartGameButtonListenerSystem(Contexts context) : base (context.input)
+        {
+            _context = context;
+        }
+
+        protected override ICollector<InputEntity> GetTrigger(IContext<InputEntity> context)
+        {
+            return context.CreateCollector(InputMatcher.ButtonStartGame);
+        }
+        
+        
+        protected override bool Filter(InputEntity entity)
+        {
+            return true;
+        }
+        
+        protected override void Execute(List<InputEntity> entities)
+        {
+            foreach (var e in entities)
+            {
+                _context.state.appStateEntity.transitionGame = true;
+            }
+        }
+    }
+}

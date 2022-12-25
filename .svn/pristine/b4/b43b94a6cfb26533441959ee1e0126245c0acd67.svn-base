@@ -1,0 +1,18 @@
+﻿using Core.Extension;
+using TMPro;
+using UnityEngine;
+
+namespace Core.Ui
+{
+    public class UIPlayerMoneyRewardView : MonoBehAdvUi, IPlayerMoneyRewardListener
+    {
+        [SerializeField] private TextMeshProUGUI levelMoneyRewardTextField;
+
+        public void OnPlayerMoneyReward(GameEntity entity, int value)
+        {
+            levelMoneyRewardTextField.text = $"+{value}";
+        }
+    }
+}
+
+

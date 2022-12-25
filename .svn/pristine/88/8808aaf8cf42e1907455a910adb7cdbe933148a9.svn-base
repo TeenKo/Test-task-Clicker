@@ -1,0 +1,124 @@
+﻿using System;
+using Core.DataStorage;
+using Entitas;
+using Entitas.CodeGeneration.Attributes;
+
+namespace Core.PlayerData
+{
+    [Game, Unique, FlagPrefix("isStatic")]
+    public sealed class CurrentPlayerDataComponent : IComponent
+    {
+    }
+
+    #region player game money
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerMoneyComponent : IComponent, ISavableData
+    {
+        public int value;
+
+        public object GetValue => value;
+
+        public void SetValue(object value)
+        {
+            this.value = Convert.ToInt32(value);
+        }
+    }
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerMoneyRewardComponent : IComponent
+    {
+        public int value;
+    }
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerRewardMultiplyComponent : IComponent
+    {
+        public int value;
+    }
+
+    [Game, Cleanup(CleanupMode.RemoveComponent)]
+    public sealed class PlayerMoneyRewardRequestComponent : IComponent
+    {
+    }
+
+    #endregion
+
+
+    #region player score
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerCurrentScoreComponent : IComponent
+    {
+        public int value;
+    }
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerTotalScoreComponent : IComponent, ISavableData
+    {
+        public int value;
+
+        public object GetValue => value;
+
+        public void SetValue(object value)
+        {
+            this.value = Convert.ToInt32(value);
+        }
+    }
+
+    #endregion
+
+
+    #region player game levels
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerCurrentGameLevelComponent : IComponent, ISavableData
+    {
+        public int value;
+
+        public object GetValue => value;
+
+        public void SetValue(object value)
+        {
+            this.value = Convert.ToInt32(value);
+        }
+    }
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerGameLevelCountComponent : IComponent, ISavableData
+    {
+        public int value;
+
+        public object GetValue => value;
+
+        public void SetValue(object value)
+        {
+            this.value = Convert.ToInt32(value);
+        }
+    }
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerGameLevelLoopComponent : IComponent
+    {
+        public int value;
+    }
+
+    [Game]
+    public sealed class PlayerGameLevelRandomComponent : IComponent
+    {
+    }
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerGameLevelProgressComponent : IComponent
+    {
+        public float value;
+    }
+
+    [Game, Event(EventTarget.Self)]
+    public sealed class PlayerGameLevelPlayTimeComponent : IComponent
+    {
+        public int value;
+    }
+
+    #endregion
+}

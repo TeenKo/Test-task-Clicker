@@ -1,0 +1,21 @@
+﻿namespace Core.ApplicationStates
+{    
+    /// <summary>
+    /// Набор систем переходов между состояними игры
+    /// </summary>      
+    public sealed class GameStateTransitionGroupSystems : Entitas.Systems
+    {
+        public GameStateTransitionGroupSystems(Contexts contexts)
+        {
+            //common
+            Add(new StartGameTransitionListenerSystem(contexts));
+            Add(new VictoryTransitionListenerSystem(contexts));
+            Add(new DefeatTransitionListenerSystem(contexts));
+            Add(new RestartLevelTransitionListenerSystem(contexts));
+            Add(new CompleteLevelTransitionListenerSystem(contexts));
+            
+            //Store
+            Add(new StoreTransitionListenerSystem(contexts));
+        }
+    }
+}

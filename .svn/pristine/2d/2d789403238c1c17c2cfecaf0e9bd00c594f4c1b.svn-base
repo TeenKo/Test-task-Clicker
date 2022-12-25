@@ -1,0 +1,27 @@
+using Entitas;
+using Entitas.Unity;
+using UnityEngine;
+
+namespace Core.Extension
+{
+    /// <summary>
+    /// Этот класс необходимо наследовать теми объектами, которые будут работать через пул.
+    /// Класс позволяет создавать объект через пул, а также управлять временем его жизни.
+    /// Нежелательно создавать экземпляры вручную.
+    /// </summary>
+    public abstract class MonoBehAdv : MonoBehaviour, IViewObject
+    {
+        public virtual void Init(IEntity iEntity)
+        {
+            gameObject.Link(iEntity);
+            iEntity.OnDestroyEntity += OnDestroyEntity;
+        }
+
+        public virtual void OnDestroyEntity(IEntity e)
+        {
+            e.OnDestroyEntity -= OnDestroyEntity;
+            gameObject.Unlink();
+            Destroy(gameObject);
+        }
+    }
+}

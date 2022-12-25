@@ -1,0 +1,18 @@
+﻿using Entitas;
+
+namespace Core.Ui
+{
+    public class UiGameScreen : UIScreen, IAnyGameListener
+    {
+        public override void Init(IEntity iEntity)
+        {
+            base.Init(iEntity);
+            Contexts.sharedInstance.state.CreateEntity().AddAnyGameListener(this);
+        }
+
+        public void OnAnyGame(StateEntity entity)
+        {
+            Open();
+        }
+    }
+}

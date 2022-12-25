@@ -1,0 +1,32 @@
+﻿using System.Collections.Generic;
+using Entitas;
+
+namespace Core.ApplicationStates
+{
+    public sealed class CompleteLevelTransitionListenerSystem : ReactiveSystem<StateEntity>
+    {
+        private readonly Contexts _contexts;
+
+        public CompleteLevelTransitionListenerSystem(Contexts contexts) : base(contexts.state)
+        {
+            _contexts = contexts;
+        }
+
+        protected override ICollector<StateEntity> GetTrigger(IContext<StateEntity> context)
+        {
+            return context.CreateCollector(StateMatcher.CompleteLevelAndGetReward);
+        }
+
+        protected override bool Filter(StateEntity entity)
+        {
+            return true;
+        }
+
+        protected override void Execute(List<StateEntity> entities)
+        {
+            _contexts.state.appStateEntity.transitionMainMenu = true;
+            
+            _contexts.level.CreateEntity().eventLoadNextGameLevel = true;
+        }
+    }
+}

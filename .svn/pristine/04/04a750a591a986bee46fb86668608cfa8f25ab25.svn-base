@@ -1,0 +1,37 @@
+﻿using Entitas;
+using UnityEngine;
+
+namespace Core.GameLevels
+{
+    /// <summary>
+    /// Система загрузки уровней
+    /// </summary>
+    public sealed class CompleteLoadGameLevelSystem : IExecuteSystem
+    {
+        private readonly Contexts _contexts;
+        private readonly IGroup<LevelEntity> _cleanUpGameLevelCompletedEventGroup;
+
+        public CompleteLoadGameLevelSystem(Contexts contexts)
+        {
+            _contexts = contexts;
+            _cleanUpGameLevelCompletedEventGroup = contexts.level.GetGroup(LevelMatcher.CleanUpGameLevelCompleted);
+        }
+
+        public void Execute()
+        {
+            foreach (var levelEntity in _cleanUpGameLevelCompletedEventGroup.GetEntities())
+            {
+                var currentGameLevel = _contexts.game.currentPlayerDataEntity.playerCurrentGameLevel.value;
+                var nextLevelSchema =
+                    _contexts.game.currentGameLevelEntity.gameLevelsLoadRule.value.GetNextLevel(currentGameLevel);
+
+                var gameEntity = _contexts.game.CreateEntity();
+                var levelSchema = Object.Instantiate(nextLevelSchema);
+                levelSchema.GameObjectName = nextLevelSchema.GameObjectName;
+                levelSchema.Init(gameEntity);
+
+                levelEntity.Destroy();
+            }
+        }
+    }
+}

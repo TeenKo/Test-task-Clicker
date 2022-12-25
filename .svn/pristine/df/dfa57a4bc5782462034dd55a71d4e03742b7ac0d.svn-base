@@ -1,0 +1,8 @@
+﻿using Core.Configs;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "GameConfig", menuName = "Configs/Game/GameConfig")]
+public sealed class GameConfig : Config
+{
+    public const string PlayerDataKey = "playerData";
+}

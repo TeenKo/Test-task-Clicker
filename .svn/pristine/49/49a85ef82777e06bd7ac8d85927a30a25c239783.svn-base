@@ -1,0 +1,50 @@
+using System.Collections.Generic;
+using Entitas;
+using UnityEngine;
+
+namespace Core.Input
+{
+    public sealed class JoystickTouchBeganReactSystem : ReactiveSystem<InputEntity>
+    {
+        private readonly GameContext _gameContext;
+
+        public JoystickTouchBeganReactSystem(InputContext inputContext, GameContext gameContext) : base(inputContext)
+        {
+            _gameContext = gameContext;
+        }
+
+        protected override ICollector<InputEntity> GetTrigger(IContext<InputEntity> context)
+        {
+            return context.CreateCollector(InputMatcher.TouchPhase);
+        }
+
+        protected override bool Filter(InputEntity entity)
+        {
+            return entity.touchPhase.value == TouchPhase.Began &&
+                   entity.hasTouchDownPosition;
+        }
+
+        protected override void Execute(List<InputEntity> entities)
+        {
+            foreach (var inputEntity in entities)
+            {
+                var inputPosition = inputEntity.touchDownPosition.value;
+                var gamePadEntity = _gameContext.joystickEntity;
+
+                if (gamePadEntity.isJoystickActive == false) continue;
+                
+                var baseRect = gamePadEntity.joystickBaseRect.value;
+                var camera = gamePadEntity.joystickCamera.value;
+                var background = gamePadEntity.joystickBackground.value;
+                var anchoredPositionBack = JoystickTools.ScreenPointToAnchoredPosition(inputPosition, baseRect, camera, background);
+
+                gamePadEntity.ReplaceJoystickInput(Vector2.zero);
+                gamePadEntity.ReplaceJoystickBackgroundAnchoredPosition(anchoredPositionBack);
+                gamePadEntity.ReplaceJoystickBackgroundSetActive(true);
+                gamePadEntity.ReplaceJoystickHandleSetActive(true);
+                gamePadEntity.ReplaceJoystickHandleAnchoredPosition(Vector2.zero);
+                break;
+            }
+        }
+    }
+}

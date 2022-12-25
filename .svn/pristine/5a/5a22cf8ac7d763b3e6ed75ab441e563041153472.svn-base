@@ -1,0 +1,46 @@
+﻿using Core.Ui;
+using Entitas;
+
+namespace Core.ApplicationStart
+{
+    public class InitializeUiElementSystem : IInitializeSystem
+    {
+        private readonly UiContext _uiContext;
+        private readonly Contexts _contexts;
+
+        /// <summary>
+        /// Система для инициализации всего Ui который есть на сцене в момент запуска гиры
+        /// </summary>
+        /// <param name="contexts"></param>
+        public InitializeUiElementSystem(Contexts contexts)
+        {
+            _uiContext = contexts.ui;
+            _contexts = contexts;
+            _uiContext.SetUiRootSchema(UnityEngine.Object.FindObjectOfType<UiRootSchema>());
+        }
+
+        public void Initialize()
+        {
+            UiRootSchema uiSchema = _uiContext.uiRootSchema.value;
+
+            if (uiSchema == null)
+                Dbg.LogError("UiRootSchema not found on scene");
+
+            //Init logic here...
+            InitScreens(ref uiSchema);
+        }
+
+        private void InitScreens(ref UiRootSchema uiRootSchema)
+        {
+            StateEntity stateEntity = _contexts.state.appStateEntity;
+
+            for (int i = 0; i < uiRootSchema.uIScreens.Length; i++)
+            {
+                UIScreen screen = uiRootSchema.uIScreens[i];
+                UiEntity screenEntity = _uiContext.CreateEntity();
+
+                screen.Init(screenEntity);
+            }
+        }
+    }
+}

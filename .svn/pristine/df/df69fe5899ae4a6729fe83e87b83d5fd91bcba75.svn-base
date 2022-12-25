@@ -1,0 +1,54 @@
+using System.Collections.Generic;
+using Entitas;
+
+namespace Core.InAppPurchases
+{
+    /// <summary>
+    /// Система обработки восстановления не расходуемых покупок
+    /// </summary>
+    public sealed class RestoreTransactionProcessingSystem : ReactiveSystem<InAppPurchaseEntity>
+    {
+        private readonly InAppPurchaseContext _contexts;
+
+        public RestoreTransactionProcessingSystem(IContext<InAppPurchaseEntity> context) : base(context)
+        {
+            _contexts = context as InAppPurchaseContext;
+        }
+
+        protected override ICollector<InAppPurchaseEntity> GetTrigger(IContext<InAppPurchaseEntity> context)
+        {
+           return context.CreateCollector(InAppPurchaseMatcher.RestoreProducts);
+        }
+
+        protected override bool Filter(InAppPurchaseEntity entity)
+        {
+           return entity.isInAppPurchaseServiceInitialized;
+        }
+
+        protected override void Execute(List<InAppPurchaseEntity> entities)
+        {
+            _contexts.service.value.RequestRestoreTransactions(Complete, Failed);
+        }
+
+        private void Complete()
+        {
+            Dbg.Log("RestoreTransactions Complete");
+
+            var group = _contexts.GetGroup(InAppPurchaseMatcher.ProductId);
+
+            foreach (var e in group.GetEntities())
+            {
+                e.ReplaceProductStatus(true);
+            }
+
+            _contexts.serviceEntity.requestRestoreProducts = false;
+        }
+
+        private void Failed()
+        {
+            Dbg.Log("RestoreTransactions Failed");
+
+            _contexts.serviceEntity.requestRestoreProducts = false;
+        }
+    }
+}

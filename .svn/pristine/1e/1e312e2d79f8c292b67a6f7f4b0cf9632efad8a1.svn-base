@@ -1,0 +1,39 @@
+using System.Collections.Generic;
+using Entitas;
+
+namespace Core.InAppPurchases
+{
+    /// <summary>
+    /// Система обработки инициализации сервиса
+    /// </summary>
+    public sealed class InitializingCompleteSystem : ReactiveSystem<InAppPurchaseEntity>
+    {
+        private readonly InAppPurchaseContext _contexts;
+
+        public InitializingCompleteSystem(IContext<InAppPurchaseEntity> context) : base(context)
+        {
+            _contexts = context as InAppPurchaseContext;
+        }
+
+        protected override ICollector<InAppPurchaseEntity> GetTrigger(IContext<InAppPurchaseEntity> context)
+        {
+            return context.CreateCollector(InAppPurchaseMatcher.InAppPurchaseServiceInitialized);
+        }
+
+        protected override bool Filter(InAppPurchaseEntity entity)
+        {
+            return entity.isInAppPurchaseServiceInitialized;
+        }
+
+        protected override void Execute(List<InAppPurchaseEntity> entities)
+        {
+            var productEntitiesGroup = _contexts.GetGroup(InAppPurchaseMatcher.ProductId);
+
+            foreach (var inAppPurchaseEntity in productEntitiesGroup.GetEntities())
+            {
+                var isPurchased = _contexts.service.value.RequestProductStatus(inAppPurchaseEntity.productId.value);
+                inAppPurchaseEntity.ReplaceProductStatus(isPurchased);
+            }
+        }
+    }
+}

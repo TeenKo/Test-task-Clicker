@@ -1,0 +1,37 @@
+﻿using Core.UI;
+using Entitas;
+using TMPro;
+using UnityEngine;
+
+namespace UI
+{
+    public sealed class UIPlayerMoneyView : UIElement, IUIPlayerMoneyShowListener, IUIPlayerMoneyHideListener,
+        IUIPlayerMoneyValueListener
+    {
+        [SerializeField] private TextMeshProUGUI moneyTextField;
+
+        public override void Init(IEntity iEntity)
+        {
+            base.Init(iEntity);
+            UIEntity.isUIPlayerMoney = true;
+            UIEntity.AddUIPlayerMoneyShowListener(this);
+            UIEntity.AddUIPlayerMoneyHideListener(this);
+            UIEntity.AddUIPlayerMoneyValueListener(this);
+        }
+
+        public void OnUIPlayerMoneyShow(UiEntity entity)
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void OnUIPlayerMoneyHide(UiEntity entity)
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void OnUIPlayerMoneyValue(UiEntity entity, int value)
+        {
+            moneyTextField.text = value.ToString();
+        }
+    }
+}

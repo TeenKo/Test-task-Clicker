@@ -1,0 +1,16 @@
+﻿using Entitas;
+
+namespace Core.ApplicationStart
+{
+    /// <summary>
+    /// Точка старта приложения
+    /// </summary>
+    public sealed class InitializeGameSystem : Systems
+    {
+        public InitializeGameSystem(Contexts contexts)
+        {
+            contexts.state.isStaticAppState = true;
+            contexts.game.isStaticCurrentGame = true;
+        }
+    }
+}

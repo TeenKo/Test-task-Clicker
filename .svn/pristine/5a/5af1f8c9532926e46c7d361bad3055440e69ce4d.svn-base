@@ -1,0 +1,12 @@
+﻿using Core.Ui;
+using Entitas;
+using Entitas.CodeGeneration.Attributes;
+
+namespace Core.Common
+{
+    [Ui, Unique]
+    public sealed class UiRootSchemaComponent : IComponent
+    {
+        public UiRootSchema value;
+    }
+}

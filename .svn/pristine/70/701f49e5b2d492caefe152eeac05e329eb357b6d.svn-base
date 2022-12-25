@@ -1,0 +1,17 @@
+﻿namespace Core.Audio.Music
+{
+    public sealed class MusicGroupSystems : Feature
+    {
+        public MusicGroupSystems(Contexts contexts)
+        {
+            Add(new PlayMainTrackOnMainMenuListenerSystem(contexts));
+            Add(new PlayMusicWinListenerSystem(contexts));
+            Add(new PlayMusicFailListenerSystem(contexts));
+            
+            Add(new SideTrackClipLengthSystem(contexts.audio));
+            
+            Add(new RequestPlayMainTrackMusicListenerSystem(contexts.audio));
+            Add(new RequestPlaySideTrackMusicListenerSystem(contexts.audio));
+        }
+    }
+}
